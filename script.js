@@ -1,23 +1,39 @@
 document.addEventListener('DOMContentLoaded', function() {
     var video = document.getElementById('scrollVideo');
-    var lastScrollTop = 0;
+    var lastPosition = -1;
     var videoDuration = 33; // Duration of your video in seconds
     var setHeight = document.documentElement.scrollHeight - window.innerHeight;
     var maxScroll = setHeight - 10; // 10 is a small offset
 
-    window.addEventListener('scroll', function() {
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    function updateVideoOnScroll(scrollTop) {
         var scrollFraction = scrollTop / maxScroll;
         var frameIndex = Math.min(videoDuration * scrollFraction, videoDuration);
+        video.currentTime = frameIndex;
+    }
 
-        if (scrollTop > lastScrollTop) {
-            // Scrolling Down
-            video.currentTime = frameIndex;
-        } else {
-            // Scrolling Up
-            video.currentTime = frameIndex;
+    window.addEventListener('scroll', function() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop != lastPosition) {
+            updateVideoOnScroll(scrollTop);
+            lastPosition = scrollTop;
         }
+    }, false);
 
-        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+    // Touch event listeners for mobile devices
+    var startTouchY;
+    var touchSensitivity = 5; // Adjust this value for touch sensitivity
+
+    window.addEventListener('touchstart', function(e) {
+        startTouchY = e.touches[0].clientY;
+    }, false);
+
+    window.addEventListener('touchmove', function(e) {
+        var touchY = e.touches[0].clientY;
+        var touchMove = startTouchY - touchY;
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (Math.abs(touchMove) > touchSensitivity) {
+            updateVideoOnScroll(scrollTop + touchMove);
+        }
     }, false);
 });

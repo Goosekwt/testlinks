@@ -14,16 +14,19 @@ document.addEventListener("DOMContentLoaded", function() {
     // Get the current scroll position
     var currentScrollPosition = window.scrollY;
 
-    // Check the scroll direction
-    var scrollDirection = (currentScrollPosition > lastScrollPosition) ? "down" : "up";
+    // Check if the scroll position has changed
+    if (currentScrollPosition !== lastScrollPosition) {
+      // Check the scroll direction
+      var scrollDirection = (currentScrollPosition > lastScrollPosition) ? "down" : "up";
 
-    // Set the playback rate based on scroll direction
-    var playbackRate = (scrollDirection === "down") ? 1 : -1;
+      // Set the playback rate based on scroll direction
+      var playbackRate = (scrollDirection === "down") ? 1 : -1;
 
-    // Set the playback rate for the animation
-    animationElement.playbackRate = playbackRate;
+      // Set the playback rate for the animation
+      animationElement.playbackRate = playbackRate;
 
-    // Update the last scroll position
-    lastScrollPosition = currentScrollPosition;
+      // Update the last scroll position
+      lastScrollPosition = currentScrollPosition;
+    }
   }
 });

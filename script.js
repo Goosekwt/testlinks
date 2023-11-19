@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
   var contentContainer = document.getElementById("content-container");
   var videoElement = document.getElementById("portraitAnimation");
+  var increment = 0.2; // Adjust the increment for smoother scrolling
 
   // Initial video element
   createVideoElement();
@@ -11,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var direction = (event.deltaY > 0) ? 1 : -1;
 
     // Adjust the playback time based on the wheel direction
-    adjustPlayback(direction);
+    adjustPlayback(direction * increment);
   });
 
   // Handle touch events for mobile swiping
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var swipeDirection = (touchEndY > touchStartY) ? -1 : 1;
 
     // Adjust the playback time based on the swipe direction
-    adjustPlayback(swipeDirection);
+    adjustPlayback(swipeDirection * increment);
   });
 
   function createVideoElement() {
@@ -45,5 +46,12 @@ document.addEventListener("DOMContentLoaded", function() {
   function adjustPlayback(seconds) {
     // Adjust the playback time of the current video element
     videoElement.currentTime += seconds;
+
+    // Ensure the playback time stays within the video duration
+    if (videoElement.currentTime < 0) {
+      videoElement.currentTime = 0;
+    } else if (videoElement.currentTime > videoElement.duration) {
+      videoElement.currentTime = videoElement.duration;
+    }
   }
 });

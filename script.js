@@ -1,36 +1,15 @@
-document.addEventListener("DOMContentLoaded", function() {
-  var contentContainer = document.getElementById("content-container");
-  var videoElement = document.getElementById("portraitAnimation");
+document.addEventListener('DOMContentLoaded', function() {
+    var video = document.getElementById('scrollVideo');
+    var frameNumber = 0; // start video at frame 0
+    var playbackConst = 1000; // lower numbers = longer scroll to play whole video
+    var setHeight = document.documentElement.scrollHeight - window.innerHeight;
 
-  // Initial video element
-  createVideoElement();
+    // Update video duration based on the length of scrolling
+    var scrollPlay = function() {
+        var frameNumber = window.pageYOffset / playbackConst;
+        video.currentTime = frameNumber;
+        window.requestAnimationFrame(scrollPlay);
+    }
 
-  // Handle scroll events for custom scrolling behavior
-  contentContainer.addEventListener("scroll", function() {
-    var scrollPosition = contentContainer.scrollTop;
-
-    // Use an easing function for smoother animation
-    var translateY = easeOutQuad(scrollPosition / 100) * 100;
-
-    // Apply a transform to the video element
-    videoElement.style.transform = "translateY(" + translateY + "vh)";
-  });
-
-  function createVideoElement() {
-    // Create a new video element
-    var newVideoElement = document.createElement("video");
-    newVideoElement.className = "portrait-animation";
-    newVideoElement.loop = true;
-    newVideoElement.muted = true;
-    newVideoElement.innerHTML = "Your browser does not support the video tag.";
-    newVideoElement.src = "animation.mp4";
-
-    // Append the new video element to the content container
-    contentContainer.appendChild(newVideoElement);
-  }
-
-  // Easing function for smoother animation
-  function easeOutQuad(t) {
-    return t * (2 - t);
-  }
+    window.requestAnimationFrame(scrollPlay);
 });

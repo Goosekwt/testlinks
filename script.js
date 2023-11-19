@@ -1,4 +1,4 @@
-dodocument.addEventListener("DOMContentLoaded", function() {
+dodocdocument.addEventListener("DOMContentLoaded", function() {
   var contentContainer = document.getElementById("content-container");
   var videoElement = document.getElementById("portraitAnimation");
   var hammer = new Hammer(contentContainer);
@@ -6,14 +6,13 @@ dodocument.addEventListener("DOMContentLoaded", function() {
   // Initial video element
   createVideoElement();
 
-  // Update playback position when the user scrolls
-  window.addEventListener("scroll", function() {
-    updatePlaybackPosition();
+  // Handle wheel events for mouse scrolling
+  contentContainer.addEventListener("wheel", function(event) {
+    // Check the direction of the wheel scroll
+    var direction = (event.deltaY > 0) ? 1 : -1;
 
-    // Check if the user has reached the bottom, and create a new video element
-    if (isAtBottom()) {
-      createVideoElement();
-    }
+    // Adjust the playback time based on the wheel direction
+    adjustPlayback(direction);
   });
 
   // Handle swipe events using Hammer.js
@@ -22,18 +21,6 @@ dodocument.addEventListener("DOMContentLoaded", function() {
     // Swipe down detected, trigger backward playback by one second
     adjustPlayback(-1);
   });
-
-  function updatePlaybackPosition() {
-    // Get the scroll position
-    var scrollPosition = window.scrollY;
-
-    // Iterate through existing video elements and update their playback position
-    var videoElements = document.querySelectorAll(".portrait-animation");
-    videoElements.forEach(function(videoEl) {
-      var playbackPosition = mapRange(scrollPosition, 0, document.body.clientHeight, 0, videoEl.duration);
-      videoEl.currentTime = playbackPosition;
-    });
-  }
 
   function createVideoElement() {
     // Create a new video element
@@ -48,18 +35,8 @@ dodocument.addEventListener("DOMContentLoaded", function() {
     contentContainer.appendChild(newVideoElement);
   }
 
-  function isAtBottom() {
-    // Check if the user has reached the bottom of the page
-    return window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
-  }
-
   function adjustPlayback(seconds) {
     // Adjust the playback time of the current video element
     videoElement.currentTime += seconds;
-  }
-
-  // Helper function to map a value from one range to another
-  function mapRange(value, fromMin, fromMax, toMin, toMax) {
-    return (value - fromMin) * (toMax - toMin) / (fromMax - fromMin) + toMin;
   }
 });

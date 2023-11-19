@@ -3,12 +3,13 @@ document.addEventListener('DOMContentLoaded', function() {
     var lastPosition = -1;
     var videoDuration = 33; // Duration of your video in seconds
     var setHeight = document.documentElement.scrollHeight - window.innerHeight;
-    var maxScroll = setHeight - 10; // 10 is a small offset
+    var maxScroll = setHeight - 10;
 
     function updateVideoOnScroll(scrollTop) {
         var scrollFraction = scrollTop / maxScroll;
         var frameIndex = Math.min(videoDuration * scrollFraction, videoDuration);
         video.currentTime = frameIndex;
+        console.log('ScrollTop:', scrollTop, 'Video Time:', video.currentTime);
     }
 
     window.addEventListener('scroll', function() {
@@ -19,9 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, false);
 
-    // Touch event listeners for mobile devices
     var startTouchY;
-    var touchSensitivity = 5; // Adjust this value for touch sensitivity
+    var touchSensitivity = 5;
 
     window.addEventListener('touchstart', function(e) {
         startTouchY = e.touches[0].clientY;

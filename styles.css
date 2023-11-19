@@ -1,18 +1,17 @@
 body, html {
     margin: 0;
     padding: 0;
-    height: 100%; /* Set height to 100% of the viewport */
-    overflow: hidden; /* Prevent scrolling */
+    height: 100%; /* Set the body and html height to the viewport height */
+    overflow: hidden; /* Hide the scrollbar and disable scrolling */
 }
 
 #scrollVideo {
-    position: fixed; /* Lock the video in place */
-    top: 50%;
-    left: 50%;
+    position: fixed; /* Fix the video in place */
+    top: 0;
+    left: 0;
     min-width: 100%;
     min-height: 100%;
     width: auto;
     height: auto;
-    transform: translate(-50%, -50%); /* Center the video */
-    object-fit: cover; /* Ensure the video covers the whole screen */
+    object-fit: cover; /* Cover the entire viewport */
 }

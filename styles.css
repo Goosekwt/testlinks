@@ -6,11 +6,7 @@ body, html {
 }
 
 .animation-container {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f1f1f1;
+  height: 200vh; /* Adjust the height to control the scrolling distance */
 }
 
 .portrait-animation {

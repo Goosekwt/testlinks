@@ -1,40 +1,20 @@
 document.addEventListener("DOMContentLoaded", function() {
   var contentContainer = document.getElementById("content-container");
   var videoElement = document.getElementById("portraitAnimation");
-  var scrollStartY = 0;
-  var isScrolling = false;
 
   // Initial video element
   createVideoElement();
 
   // Handle scroll events for custom scrolling behavior
   contentContainer.addEventListener("scroll", function() {
-    if (!isScrolling) {
-      isScrolling = true;
-      scrollStartY = contentContainer.scrollTop;
-
-      // Initiate the animation loop
-      requestAnimationFrame(animateScroll);
-    }
-  });
-
-  function animateScroll(timestamp) {
-    var elapsed = timestamp - scrollStartY;
-    var progress = Math.min(elapsed / 300, 1); // Adjust the duration
+    var scrollPosition = contentContainer.scrollTop;
 
     // Use an easing function for smoother animation
-    var easeProgress = easeOutQuad(progress);
+    var translateY = easeOutQuad(scrollPosition / 100) * 100;
 
     // Apply a transform to the video element
-    videoElement.style.transform = "translateY(" + easeProgress * 100 + "vh)";
-
-    // Continue the animation until it reaches the end
-    if (progress < 1) {
-      requestAnimationFrame(animateScroll);
-    } else {
-      isScrolling = false;
-    }
-  }
+    videoElement.style.transform = "translateY(" + translateY + "vh)";
+  });
 
   function createVideoElement() {
     // Create a new video element

@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
   var animationElement = document.querySelector(".portrait-animation");
+  var lastScrollPosition = 0;
 
   // Set the initial playback rate based on scroll position
   updatePlaybackRate();
@@ -10,18 +11,19 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   function updatePlaybackRate() {
-    // Get the scroll position
-    var scrollPosition = window.scrollY;
+    // Get the current scroll position
+    var currentScrollPosition = window.scrollY;
 
-    // Map the scroll position to the playback rate (adjust as needed)
-    var playbackRate = mapRange(scrollPosition, 0, document.body.clientHeight, 1, 2);
+    // Check the scroll direction
+    var scrollDirection = (currentScrollPosition > lastScrollPosition) ? "down" : "up";
+
+    // Set the playback rate based on scroll direction
+    var playbackRate = (scrollDirection === "down") ? 1 : -1;
 
     // Set the playback rate for the animation
     animationElement.playbackRate = playbackRate;
-  }
 
-  // Helper function to map a value from one range to another
-  function mapRange(value, fromMin, fromMax, toMin, toMax) {
-    return (value - fromMin) * (toMax - toMin) / (fromMax - fromMin) + toMin;
+    // Update the last scroll position
+    lastScrollPosition = currentScrollPosition;
   }
 });

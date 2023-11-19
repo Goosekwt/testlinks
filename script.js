@@ -1,7 +1,6 @@
-dodocdocument.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
   var contentContainer = document.getElementById("content-container");
   var videoElement = document.getElementById("portraitAnimation");
-  var hammer = new Hammer(contentContainer);
 
   // Initial video element
   createVideoElement();
@@ -15,11 +14,19 @@ dodocdocument.addEventListener("DOMContentLoaded", function() {
     adjustPlayback(direction);
   });
 
-  // Handle swipe events using Hammer.js
-  hammer.get('swipe').set({ direction: Hammer.DIRECTION_VERTICAL });
-  hammer.on('swipedown', function() {
-    // Swipe down detected, trigger backward playback by one second
-    adjustPlayback(-1);
+  // Handle touch events for mobile swiping
+  var touchStartY;
+
+  contentContainer.addEventListener("touchstart", function(event) {
+    touchStartY = event.touches[0].clientY;
+  });
+
+  contentContainer.addEventListener("touchend", function(event) {
+    var touchEndY = event.changedTouches[0].clientY;
+    var swipeDirection = (touchEndY > touchStartY) ? -1 : 1;
+
+    // Adjust the playback time based on the swipe direction
+    adjustPlayback(swipeDirection);
   });
 
   function createVideoElement() {

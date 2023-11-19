@@ -17,4 +17,5 @@ body, html {
   height: 100%;
   object-fit: cover;
   transform-origin: top left;
+  transition: transform 0.3s ease; /* Adjust the transition duration and easing function */
 }

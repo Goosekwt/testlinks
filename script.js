@@ -1,39 +1,40 @@
 document.addEventListener("DOMContentLoaded", function() {
   var contentContainer = document.getElementById("content-container");
   var videoElement = document.getElementById("portraitAnimation");
-  var increment = 0.1; // Adjust the increment for smoother scrolling
+  var scrollStartY = 0;
   var isScrolling = false;
-  var scrollStartTime = 0;
-  var maxScrollDuration = 2000; // Adjust the duration for the deceleration effect
 
   // Initial video element
   createVideoElement();
 
-  // Handle wheel events for mouse scrolling
-  contentContainer.addEventListener("wheel", function(event) {
-    event.preventDefault(); // Prevent default scrolling behavior
+  // Handle scroll events for custom scrolling behavior
+  contentContainer.addEventListener("scroll", function() {
+    if (!isScrolling) {
+      isScrolling = true;
+      scrollStartY = contentContainer.scrollTop;
 
-    // Check the direction of the wheel scroll
-    var direction = (event.deltaY > 0) ? 1 : -1;
-
-    // Start scrolling animation
-    startScrollAnimation(direction * increment);
+      // Initiate the animation loop
+      requestAnimationFrame(animateScroll);
+    }
   });
 
-  // Handle touch events for mobile swiping
-  var touchStartY;
+  function animateScroll(timestamp) {
+    var elapsed = timestamp - scrollStartY;
+    var progress = Math.min(elapsed / 300, 1); // Adjust the duration
 
-  contentContainer.addEventListener("touchstart", function(event) {
-    touchStartY = event.touches[0].clientY;
-  });
+    // Use an easing function for smoother animation
+    var easeProgress = easeOutQuad(progress);
 
-  contentContainer.addEventListener("touchend", function(event) {
-    var touchEndY = event.changedTouches[0].clientY;
-    var swipeDirection = (touchEndY > touchStartY) ? -1 : 1;
+    // Apply a transform to the video element
+    videoElement.style.transform = "translateY(" + easeProgress * 100 + "vh)";
 
-    // Start scrolling animation
-    startScrollAnimation(swipeDirection * increment);
-  });
+    // Continue the animation until it reaches the end
+    if (progress < 1) {
+      requestAnimationFrame(animateScroll);
+    } else {
+      isScrolling = false;
+    }
+  }
 
   function createVideoElement() {
     // Create a new video element
@@ -46,41 +47,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Append the new video element to the content container
     contentContainer.appendChild(newVideoElement);
-  }
-
-  function startScrollAnimation(scrollIncrement) {
-    if (!isScrolling) {
-      isScrolling = true;
-      scrollStartTime = performance.now();
-
-      // Initiate the animation loop
-      requestAnimationFrame(function animateScroll(timestamp) {
-        var elapsed = timestamp - scrollStartTime;
-        var progress = Math.min(elapsed / maxScrollDuration, 1);
-
-        // Adjust the playback time based on the easing function
-        adjustPlayback(easeOutQuad(progress) * scrollIncrement);
-
-        // Continue the animation until it reaches the end
-        if (progress < 1) {
-          requestAnimationFrame(animateScroll);
-        } else {
-          isScrolling = false;
-        }
-      });
-    }
-  }
-
-  function adjustPlayback(seconds) {
-    // Adjust the playback time of the current video element
-    videoElement.currentTime += seconds;
-
-    // Ensure the playback time stays within the video duration
-    if (videoElement.currentTime < 0) {
-      videoElement.currentTime = 0;
-    } else if (videoElement.currentTime > videoElement.duration) {
-      videoElement.currentTime = videoElement.duration;
-    }
   }
 
   // Easing function for smoother animation

@@ -1,15 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     var video = document.getElementById('scrollVideo');
-    var frameNumber = 0; // start video at frame 0
-    var playbackConst = 1000; // lower numbers = longer scroll to play whole video
     var setHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var playbackConst = setHeight / 33; // Adjust this value as needed
 
-    // Update video duration based on the length of scrolling
-    var scrollPlay = function() {
-        var frameNumber = window.pageYOffset / playbackConst;
-        video.currentTime = frameNumber;
-        window.requestAnimationFrame(scrollPlay);
-    }
-
-    window.requestAnimationFrame(scrollPlay);
+    // Ensure video metadata is loaded
+    video.addEventListener('loadedmetadata', function() {
+        // Set up scroll event
+        window.addEventListener('scroll', function() {
+            var scrollPosition = window.pageYOffset;
+            var videoTime = scrollPosition / playbackConst;
+            video.currentTime = videoTime;
+        });
+    });
 });

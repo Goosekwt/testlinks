@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
   var animationElement = document.querySelector(".portrait-animation");
+  var ticking = false;
   var lastScrollPosition = 0;
 
   // Set the initial playback rate based on scroll position
@@ -7,7 +8,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Update playback rate when the user scrolls
   window.addEventListener("scroll", function() {
-    updatePlaybackRate();
+    if (!ticking) {
+      window.requestAnimationFrame(function() {
+        updatePlaybackRate();
+        ticking = false;
+      });
+      ticking = true;
+    }
   });
 
   function updatePlaybackRate() {

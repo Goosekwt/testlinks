@@ -7,11 +7,12 @@ body, html {
 
 #scrollVideo {
     position: fixed; /* Fix the video in place */
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
     min-width: 100%;
     min-height: 100%;
     width: auto;
     height: auto;
+    transform: translate(-50%, -50%); /* Center the video */
     object-fit: cover; /* Cover the entire viewport */
 }

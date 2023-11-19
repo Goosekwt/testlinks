@@ -4,16 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <title>Scroll Animation</title>
+  <title>Swipe Animation</title>
 </head>
 <body>
   <div id="content-container" class="animation-container">
     <!-- Initial video element -->
-    <video class="portrait-animation" loop muted>
+    <video id="portraitAnimation" class="portrait-animation" loop muted>
       <source src="animation.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

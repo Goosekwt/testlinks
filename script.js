@@ -1,5 +1,7 @@
-document.addEventListener("DOMContentLoaded", function() {
+dodocument.addEventListener("DOMContentLoaded", function() {
   var contentContainer = document.getElementById("content-container");
+  var videoElement = document.getElementById("portraitAnimation");
+  var hammer = new Hammer(contentContainer);
 
   // Initial video element
   createVideoElement();
@@ -14,15 +16,22 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
+  // Handle swipe events using Hammer.js
+  hammer.get('swipe').set({ direction: Hammer.DIRECTION_VERTICAL });
+  hammer.on('swipedown', function() {
+    // Swipe down detected, trigger backward playback by one second
+    adjustPlayback(-1);
+  });
+
   function updatePlaybackPosition() {
     // Get the scroll position
     var scrollPosition = window.scrollY;
 
     // Iterate through existing video elements and update their playback position
     var videoElements = document.querySelectorAll(".portrait-animation");
-    videoElements.forEach(function(videoElement) {
-      var playbackPosition = mapRange(scrollPosition, 0, document.body.clientHeight, 0, videoElement.duration);
-      videoElement.currentTime = playbackPosition;
+    videoElements.forEach(function(videoEl) {
+      var playbackPosition = mapRange(scrollPosition, 0, document.body.clientHeight, 0, videoEl.duration);
+      videoEl.currentTime = playbackPosition;
     });
   }
 
@@ -42,6 +51,11 @@ document.addEventListener("DOMContentLoaded", function() {
   function isAtBottom() {
     // Check if the user has reached the bottom of the page
     return window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+  }
+
+  function adjustPlayback(seconds) {
+    // Adjust the playback time of the current video element
+    videoElement.currentTime += seconds;
   }
 
   // Helper function to map a value from one range to another
